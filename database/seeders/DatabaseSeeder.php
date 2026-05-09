@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         // Create admin user
         $admin = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'robertdeanpantino@gmail.com',
+            'email' => 'admin@padalahub.com',
         ]);
 
         \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);

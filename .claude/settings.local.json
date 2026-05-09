@@ -4,7 +4,11 @@
       "PowerShell(composer *)",
       "PowerShell(npm config *)",
       "PowerShell(New-Item *)",
-      "PowerShell(Set-Location \"C:\\\\laragon\\\\www\\\\padalahub\"; php artisan tinker --execute=\"use App\\\\Models\\\\User; \\\\$u = User::first\\(\\); echo \\\\$u->email;\" 2>&1)"
+      "PowerShell(Set-Location \"C:\\\\laragon\\\\www\\\\padalahub\"; php artisan tinker --execute=\"use App\\\\Models\\\\User; \\\\$u = User::first\\(\\); echo \\\\$u->email;\" 2>&1)",
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\laragon\\\\www\\\\padalahub\\\\app\\\\Services\\\\DomesticComparisonService.php\"\\); $bytes[0..5] | ForEach-Object { \"{0:X2}\" -f $_ })",
+      "PowerShell(php -l \"C:\\\\laragon\\\\www\\\\padalahub\\\\app\\\\Http\\\\Controllers\\\\Auth\\\\RegisteredUserController.php\" 2>&1)",
+      "PowerShell(php -l \"C:\\\\laragon\\\\www\\\\padalahub\\\\app\\\\Http\\\\Controllers\\\\Auth\\\\VerifyEmailController.php\" 2>&1)",
+      "PowerShell(php -l \"C:\\\\laragon\\\\www\\\\padalahub\\\\app\\\\Http\\\\Controllers\\\\Auth\\\\EmailVerificationPromptController.php\" 2>&1)"
     ]
   }
 }

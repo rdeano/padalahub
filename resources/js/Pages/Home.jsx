@@ -1,9 +1,11 @@
-﻿import { Head, router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import {
     Box,
     Button,
+    Chip,
     Container,
     FormControl,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -11,8 +13,10 @@ import {
     Typography,
     Paper,
     Stack,
+    Divider,
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useState } from 'react';
 
 const REGIONS = [
@@ -22,7 +26,7 @@ const REGIONS = [
     { value: 'mindanao', label: 'Mindanao' },
 ];
 
-export default function Home() {
+export default function Home({ providers = [] }) {
     const [amount, setAmount] = useState('');
     const [senderRegion, setSenderRegion] = useState('');
     const [recipientRegion, setRecipientRegion] = useState('');
@@ -50,79 +54,180 @@ export default function Home() {
                 <meta name="description" content="Hanapin ang pinakamura at pinakamabilis na paraan ng pagpapadala ng pera sa Pilipinas. Ihambing ang Palawan, Cebuana, LBC, GCash, at iba pa." />
             </Head>
 
-            <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <Container maxWidth="sm" sx={{ py: 8 }}>
-                    <Stack spacing={3} alignItems="center" mb={5}>
-                        <Typography variant="h3" fontWeight={700} color="primary" textAlign="center">
+            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+                {/* Gradient Hero */}
+                <Box
+                    sx={{
+                        background: 'linear-gradient(160deg, #0055cc 0%, #0077FF 45%, #00C2FF 100%)',
+                        pt: { xs: 6, md: 10 },
+                        pb: { xs: 12, md: 16 },
+                        px: 2,
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}
+                >
+                    {/* Decorative blobs */}
+                    <Box sx={{
+                        position: 'absolute', top: -60, right: -60, width: 280, height: 280,
+                        borderRadius: '50%', background: 'rgba(255,255,255,0.07)',
+                    }} />
+                    <Box sx={{
+                        position: 'absolute', bottom: -40, left: -40, width: 200, height: 200,
+                        borderRadius: '50%', background: 'rgba(255,255,255,0.05)',
+                    }} />
+
+                    <Container maxWidth="sm" sx={{ position: 'relative', textAlign: 'center' }}>
+                        {/* Logo mark */}
+                        <Box sx={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                            width: 60, height: 60, borderRadius: '18px',
+                            background: 'rgba(255,255,255,0.2)',
+                            backdropFilter: 'blur(8px)',
+                            mb: 2,
+                        }}>
+                            <CompareArrowsIcon sx={{ fontSize: 32, color: '#fff' }} />
+                        </Box>
+
+                        <Typography variant="h3" sx={{ color: '#fff', fontWeight: 800, mb: 1 }}>
                             PadalaHub
                         </Typography>
-                        <Typography variant="h6" color="text.secondary" textAlign="center">
-                            Hanapin ang pinakamurang paraan ng pagpapadala ng pera
+                        <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.1rem', mb: 0.5 }}>
+                            Hanapin ang pinakamurang paraan
                         </Typography>
-                    </Stack>
+                        <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.1rem' }}>
+                            ng pagpapadala ng pera sa Pilipinas
+                        </Typography>
 
-                    <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+                       
+                    </Container>
+                </Box>
+
+                {/* Floating Card */}
+                <Container maxWidth="sm" sx={{ mt: { xs: -8, md: -10 }, pb: 6, px: { xs: 2, sm: 3 }, position: 'relative', zIndex: 2 }}>
+                    <Paper elevation={0} sx={{
+                        p: { xs: 3, sm: 4 },
+                        borderRadius: '24px',
+                        boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+                    }}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
+                            Magkano ang ipapadala?
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+                            Ilagay ang halaga at rehiyon para makita ang pinakamababang bayad.
+                        </Typography>
+
                         <form onSubmit={handleSubmit}>
-                            <Stack spacing={3}>
+                            <Stack spacing={2.5}>
                                 <TextField
-                                    label="Halaga (₱)"
+                                    label="Halaga"
                                     type="number"
                                     value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
+                                    onChange={(e) => { setAmount(e.target.value); setErrors({}); }}
                                     error={!!errors.amount}
                                     helperText={errors.amount}
                                     inputProps={{ min: 1, max: 50000 }}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>₱</Typography>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    placeholder="1,000"
                                     fullWidth
                                 />
 
-                                <FormControl fullWidth error={!!errors.senderRegion}>
-                                    <InputLabel>Rehiyon ng Nagpapadala</InputLabel>
-                                    <Select
-                                        value={senderRegion}
-                                        label="Rehiyon ng Nagpapadala"
-                                        onChange={(e) => setSenderRegion(e.target.value)}
-                                    >
-                                        {REGIONS.map((r) => (
-                                            <MenuItem key={r.value} value={r.value}>{r.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.senderRegion && (
-                                        <Typography variant="caption" color="error" ml={2}>{errors.senderRegion}</Typography>
-                                    )}
-                                </FormControl>
+                                <Box>
+                                    <Stack direction="row" spacing={1} alignItems="center" mb={0.5}>
+                                        <LocationOnIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                                        <Typography variant="caption" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                            LOKASYON
+                                        </Typography>
+                                    </Stack>
+                                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                                        <FormControl fullWidth error={!!errors.senderRegion} size="small">
+                                            <InputLabel>Nagpapadala (mula)</InputLabel>
+                                            <Select
+                                                value={senderRegion}
+                                                label="Nagpapadala (mula)"
+                                                onChange={(e) => { setSenderRegion(e.target.value); setErrors({}); }}
+                                            >
+                                                {REGIONS.map((r) => (
+                                                    <MenuItem key={r.value} value={r.value}>{r.label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                            {errors.senderRegion && (
+                                                <Typography variant="caption" sx={{ color: 'error.main', ml: 1.5, mt: 0.5 }}>{errors.senderRegion}</Typography>
+                                            )}
+                                        </FormControl>
 
-                                <FormControl fullWidth error={!!errors.recipientRegion}>
-                                    <InputLabel>Rehiyon ng Tatanggap</InputLabel>
-                                    <Select
-                                        value={recipientRegion}
-                                        label="Rehiyon ng Tatanggap"
-                                        onChange={(e) => setRecipientRegion(e.target.value)}
-                                    >
-                                        {REGIONS.map((r) => (
-                                            <MenuItem key={r.value} value={r.value}>{r.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.recipientRegion && (
-                                        <Typography variant="caption" color="error" ml={2}>{errors.recipientRegion}</Typography>
-                                    )}
-                                </FormControl>
+                                        <FormControl fullWidth error={!!errors.recipientRegion} size="small">
+                                            <InputLabel>Tatanggap (patungo)</InputLabel>
+                                            <Select
+                                                value={recipientRegion}
+                                                label="Tatanggap (patungo)"
+                                                onChange={(e) => { setRecipientRegion(e.target.value); setErrors({}); }}
+                                            >
+                                                {REGIONS.map((r) => (
+                                                    <MenuItem key={r.value} value={r.value}>{r.label}</MenuItem>
+                                                ))}
+                                            </Select>
+                                            {errors.recipientRegion && (
+                                                <Typography variant="caption" sx={{ color: 'error.main', ml: 1.5, mt: 0.5 }}>{errors.recipientRegion}</Typography>
+                                            )}
+                                        </FormControl>
+                                    </Stack>
+                                </Box>
 
                                 <Button
                                     type="submit"
                                     variant="contained"
                                     size="large"
-                                    endIcon={<SendIcon />}
                                     fullWidth
+                                    sx={{ py: 1.75, fontSize: '1rem', mt: 0.5 }}
                                 >
                                     Ihambing ang Bayad
                                 </Button>
                             </Stack>
                         </form>
+
+                        <Divider sx={{ my: 3 }} />
+
+                        <Stack direction="row" justifyContent="center" spacing={4}>
+                            {[['Libre', 'Walang bayad'], ['Real-time', 'Updated data'], ['5 providers', 'Ikinukumpara']].map(([label, sub]) => (
+                                <Box key={label} textAlign="center">
+                                    <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>{label}</Typography>
+                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>{sub}</Typography>
+                                </Box>
+                            ))}
+                        </Stack>
                     </Paper>
 
-                    <Typography variant="body2" color="text.secondary" textAlign="center" mt={3}>
-                        Libreng gamitin. Walang account na kailangan.
-                    </Typography>
+                    {/* International Coming Soon */}
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', letterSpacing: 1, textTransform: 'uppercase', display: 'block', mb: 1.5 }}>
+                            Paparating din
+                        </Typography>
+
+                        <Paper elevation={0} sx={{
+                            p: 2.5,
+                            background: 'linear-gradient(135deg, #f8faff 0%, #eef3ff 100%)',
+                            border: '1px dashed #c5d5ff',
+                            boxShadow: 'none',
+                        }}>
+                            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                                <Box>
+                                    <Typography sx={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                                        International Remittance
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                        Wise · Remitly · Western Union
+                                    </Typography>
+                                </Box>
+                                <Chip label="Coming Soon" size="small" sx={{ bgcolor: '#e8efff', color: '#0055cc', fontWeight: 700 }} />
+                            </Stack>
+                        </Paper>
+                    </Box>
                 </Container>
             </Box>
         </>
