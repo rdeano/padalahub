@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(composer *)",
+      "PowerShell(npm config *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Set-Location \"C:\\\\laragon\\\\www\\\\padalahub\"; php artisan tinker --execute=\"use App\\\\Models\\\\User; \\\\$u = User::first\\(\\); echo \\\\$u->email;\" 2>&1)"
+    ]
+  }
+}
